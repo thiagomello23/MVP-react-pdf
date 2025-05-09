@@ -8,13 +8,12 @@ const componentMap: any = {
 };
 
 export default function DynamicComponentRender(
-    {componentName, isActive, x, y, zIndex = 1}: {componentName: any, isActive: boolean, x: number, y: number, zIndex?: number}
+    {componentName, x, y, zIndex = 1}: {componentName: any, x: number, y: number, zIndex?: number}
 ) {
 
     const Component = componentMap[componentName]
 
-    if(isActive) {
-        return <div 
+    return <div 
             style={{
                 position: "absolute",
                 top: y, 
@@ -27,7 +26,4 @@ export default function DynamicComponentRender(
         >
             {Component}
         </div>
-    } else {
-        return;
-    }
 }

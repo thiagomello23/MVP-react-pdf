@@ -6,8 +6,6 @@ import DynamicComponentRender from './DynamicComponentRender'
 export default function DroppablePlace() {
   const [clientData, setClientData] = useState<any>([])
 
-  const [isDrop, setIsDrop] = useState(false)
-
   const ref = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
   const reactToPrintFn = useReactToPrint({ contentRef });
@@ -16,31 +14,35 @@ export default function DroppablePlace() {
     accept: "ANY",
     drop: (item: any, monitor) => {
       const element = monitor.getClientOffset()
-      
-      console.log(element)
+
       setClientData((prev: any) => {
         return [
           {
             x: element?.x,
             y: element?.y,
             name: item.name,
-            key: item.key,
+            key: new Date().getTime() + Math.random() * 100,
             zIndex: item.zIndex ? item.zIndex : 1
           },
           ...prev
         ]
       });
-
-      setIsDrop(true)
     },
     collect: monitor => ({
         isOver: !!monitor.isOver(),
     })
   }))
 
+  const onSave = () => {
+    localStorage.setItem("DATA", JSON.stringify(clientData))
+  }
+
   useEffect(() => {
     if(ref.current) {
       drop(ref.current)
+    }
+    if(localStorage.getItem("DATA")?.length){
+      setClientData(JSON.parse(localStorage.getItem("DATA")!))
     }
   }, [ref, drop])
 
@@ -53,8 +55,7 @@ export default function DroppablePlace() {
         {clientData?.map((item: any) => (
           <DynamicComponentRender 
             key={item.key} 
-            componentName={item.name} 
-            isActive={isDrop} 
+            componentName={item.name}
             x={item.x} 
             y={item.y} 
             zIndex={item.zIndex}
@@ -62,6 +63,7 @@ export default function DroppablePlace() {
         ))}
       </div>
       <button onClick={reactToPrintFn} className='bg-amber-500 p-10'>GERAR PDF</button>
+      <button onClick={onSave} className='bg-amber-700 p-10'>SALVAR</button>
     </div>
   )
 }
