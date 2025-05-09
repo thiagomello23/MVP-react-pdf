@@ -8,7 +8,8 @@ export default function DroppableRectangle() {
     type: "ANY",
     item: {
       name: "DroppableRectangle",
-      key: new Date().getTime() + Math.random() * 100
+      key: new Date().getTime() + Math.random() * 100,
+      zIndex: 1
     },
     collect: monitor => ({
       isDragging: !!monitor.isDragging(),

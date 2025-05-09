@@ -6,14 +6,15 @@ export default function DraggableInput() {
     const ref = useRef<HTMLDivElement>(null)
 
     const [{isDragging}, drag] = useDrag(() => ({
-    type: "ANY",
-    item: {
-        name: "DraggableInput",
-        key: new Date().getTime() + Math.random() * 100
-    },
-    collect: monitor => ({
-        isDragging: !!monitor.isDragging(),
-    }),
+        type: "ANY",
+        item: {
+            name: "DraggableInput",
+            key: new Date().getTime() + Math.random() * 100,
+            zIndex: 10
+        },
+        collect: monitor => ({
+            isDragging: !!monitor.isDragging(),
+        }),
     }))
 
     useEffect(() => {

@@ -8,7 +8,7 @@ const componentMap: any = {
 };
 
 export default function DynamicComponentRender(
-    {componentName, isActive, x, y}: {componentName: any, isActive: boolean, x: number, y: number}
+    {componentName, isActive, x, y, zIndex = 1}: {componentName: any, isActive: boolean, x: number, y: number, zIndex?: number}
 ) {
 
     const Component = componentMap[componentName]
@@ -22,6 +22,7 @@ export default function DynamicComponentRender(
                 transform: `translate(-50%, -40px)`,
                 width: "30%", 
                 height: "30%",
+                zIndex: zIndex
             }}
         >
             {Component}

@@ -1,6 +1,5 @@
 import { useRef, useEffect, useState } from 'react'
 import { useDrop } from 'react-dnd'
-import DroppableRectangle from './DroppableRectangle'
 import { useReactToPrint } from 'react-to-print'
 import DynamicComponentRender from './DynamicComponentRender'
 
@@ -25,7 +24,8 @@ export default function DroppablePlace() {
             x: element?.x,
             y: element?.y,
             name: item.name,
-            key: item.key
+            key: item.key,
+            zIndex: item.zIndex ? item.zIndex : 1
           },
           ...prev
         ]
@@ -48,9 +48,17 @@ export default function DroppablePlace() {
     <div ref={ref} className='w-full h-full relative'>
       <div
         ref={contentRef}
+        className=''
       >
         {clientData?.map((item: any) => (
-          <DynamicComponentRender key={item.key} componentName={item.name} isActive={isDrop} x={item.x} y={item.y} />
+          <DynamicComponentRender 
+            key={item.key} 
+            componentName={item.name} 
+            isActive={isDrop} 
+            x={item.x} 
+            y={item.y} 
+            zIndex={item.zIndex}
+          />
         ))}
       </div>
       <button onClick={reactToPrintFn} className='bg-amber-500 p-10'>GERAR PDF</button>
