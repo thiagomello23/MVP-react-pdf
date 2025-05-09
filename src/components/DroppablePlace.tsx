@@ -2,12 +2,10 @@ import { useRef, useEffect, useState } from 'react'
 import { useDrop } from 'react-dnd'
 import DroppableRectangle from './DroppableRectangle'
 import { useReactToPrint } from 'react-to-print'
+import DynamicComponentRender from './DynamicComponentRender'
 
 export default function DroppablePlace() {
-  const [clientOffset, setClientOffset] = useState({
-    x: 0,
-    y: 0
-  })
+  const [clientData, setClientData] = useState<any>([])
 
   const [isDrop, setIsDrop] = useState(false)
 
@@ -16,14 +14,21 @@ export default function DroppablePlace() {
   const reactToPrintFn = useReactToPrint({ contentRef });
 
   const [{isOver}, drop] = useDrop(() => ({
-    accept: "RECTANGLE",
-    drop: (item, monitor) => {
+    accept: "ANY",
+    drop: (item: any, monitor) => {
       const element = monitor.getClientOffset()
       
       console.log(element)
-      setClientOffset({
-        x: element?.x,
-        y: element?.y
+      setClientData((prev: any) => {
+        return [
+          {
+            x: element?.x,
+            y: element?.y,
+            name: item.name,
+            key: item.key
+          },
+          ...prev
+        ]
       });
 
       setIsDrop(true)
@@ -43,18 +48,10 @@ export default function DroppablePlace() {
     <div ref={ref} className='w-full h-full relative'>
       <div
         ref={contentRef}
-        style={{
-          position: "absolute", 
-          top: clientOffset.y, 
-          left: clientOffset.x, 
-          width: "30%", 
-          height: "30%",
-          transform: `translate(-50%, -40px)`
-        }}
       >
-        {isDrop && (
-          <DroppableRectangle />
-        )}
+        {clientData?.map((item: any) => (
+          <DynamicComponentRender key={item.key} componentName={item.name} isActive={isDrop} x={item.x} y={item.y} />
+        ))}
       </div>
       <button onClick={reactToPrintFn} className='bg-amber-500 p-10'>GERAR PDF</button>
     </div>

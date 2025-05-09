@@ -5,7 +5,11 @@ export default function DroppableRectangle() {
   const ref = useRef<HTMLDivElement>(null)
 
   const [{isDragging}, drag] = useDrag(() => ({
-    type: "RECTANGLE",
+    type: "ANY",
+    item: {
+      name: "DroppableRectangle",
+      key: new Date().getTime() + Math.random() * 100
+    },
     collect: monitor => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -19,8 +23,8 @@ export default function DroppableRectangle() {
 
     return (
         <>
-            <div ref={ref} className='w-full bg-blue-700 h-20 p-2 shadow-2xl'>
-                TESTE
+            <div ref={ref} className='w-full bg-blue-700 h-20 p-2 shadow-2xl z-10'>
+              
             </div>
         </>
     )
